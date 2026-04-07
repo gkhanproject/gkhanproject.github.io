@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<script defer>
+    
+
+function showCopyDialog() {
+  const now = new Date();
+  // Format: 03/17/2026 05:10 PM
+  const formattedDate = Utilities.formatDate(now, Session.getScriptTimeZone(), "MM/dd/yyyy hh:mm a");
+  
+
+
+  const html = HtmlService.createHtmlOutput(
+    ``
+  ).setWidth(300).setHeight(150);
+  
+  SpreadsheetApp.getUi().showModalDialog(html, 'Copy Date');
+}
+
+function getTimeIn (){
+    const sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+    const currentTime = generateTime();
+    const result = `Time In: ${currentTime}`
+    sheet.getRange('A1').setValue(result)
+    // await navigator.clipboard.writeText(result);
+}
+
+function getTimeOut (){
+    const sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+    const currentTime = generateTime();
+    const result = `Time Out: ${currentTime}`
+    sheet.getRange('A1').setValue(result)
+    // await navigator.clipboard.writeText(result);
+}
+</script>
+<script defer>
+       function copyToClipboard(text) {
+         navigator.clipboard.writeText(text).then(() => {
+           alert('Copied: ' + text);
+         });
+       }
+
+       function generateTime() {
+  
+        const date = new Date(); // Note: Month is 0-indexed (2 = March)
+
+        const formatter = new Intl.DateTimeFormat('en-US', {
+          month: '2-digit',
+          day: '2-digit',
+          year: 'numeric',
+          hour: '2-digit',
+          minute: '2-digit',
+          hour12: true
+        });
+
+        // Format and then remove the comma that en-US adds between date and time
+        const formatted = formatter.format(date).replace(',', '');
+
+        return formatted;
+      }
+
+      function onClick(action) {
+        const currentTime = generateTime();
+
+        let result = '';
+        if (action == 'time_out') {
+          result = "Time Out: " + currentTime;
+        } else if (action == 'time_in') {
+          result = "Time In: " + currentTime;
+        } else {
+          alert('Error: Unknow action');
+          return false;
+        }
+
+        copyToClipboard(result);
+      }
+
+      function updateTime() {
+        const elem = document.querySelector("b#update-time")
+        elem.textContent = generateTime();
+      }
+      
+      updateTime()
+      const interval = setInterval(updateTime, 30000)
+
+     </script>
+<body>
+    
+    <p>Date: <b id="update-time"></b></p>
+     <button onclick="onClick('time_in')">Time In: Copy to Clipboard</button>
+     <button onclick="onClick('time_out')">Time Out: Copy to Clipboard</button>
+     
+</body>
+</html>

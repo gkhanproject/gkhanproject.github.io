@@ -10,8 +10,9 @@
     <p>Date: <b id="update-time"></b></p>
     <button onclick="onClick('time_in')">Time In: Copy to Clipboard</button>
     <button onclick="onClick('time_out')">Time Out: Copy to Clipboard</button>
+    
+    <p><b>Instruction :</b> After taking the video recording, you can click the in or out button to automatically copy the date format</p>
     <script>
-
         function copyToClipboard(text) {
           navigator.clipboard.writeText(text).then(() => {
             alert("Copied: " + text);
